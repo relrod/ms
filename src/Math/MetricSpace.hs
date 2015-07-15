@@ -19,6 +19,15 @@ class MetricSpace a where
   (<->) = dist
 
 newtype WrappedIntegral a = WrappedIntegral { getA :: Integral a => a }
+newtype Discrete a = Discrete { getDiscrete :: Eq a => a }
+
+-- | The discrete metric.
+--
+-- @forall a b. if a == b then 0 else 1@
+instance Eq a => MetricSpace (Discrete a) where
+  dist (Discrete a) (Discrete b)
+    | a == b    = 0
+    | otherwise = 1
 
 -- | 1-dimensional euclidean distance.
 instance Integral a => MetricSpace (WrappedIntegral a) where
