@@ -7,9 +7,9 @@ module Math.MetricSpace where
 -- four laws:
 --
 --   (1) __non-negative__: @forall x y. 'dist' x y >= 0@
---   (2) __identity of indiscernibles__: @forall x y. dist x y == 0 <=> x == y@
---   (3) __symmetry__: @forall x y. dist x y == dist y x@
---   (4) __triangle inequality__: @forall x y z. dist x z <= dist x y + dist y z@
+--   (2) __identity of indiscernibles__: @forall x y. 'dist' x y == 0 <=> x == y@
+--   (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
+--   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
 class MetricSpace a where
   dist :: Floating b => a -> a -> b
 
