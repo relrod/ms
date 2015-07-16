@@ -52,6 +52,7 @@ newtype Discrete5 a b c d e =
 
 newtype Levenshtein = Levenshtein String
 
+-- | Levenshtein distance between 'String's.
 instance MetricSpace Levenshtein where
   dist (Levenshtein a) (Levenshtein b) =
     fromIntegral $ levenshteinDistance defaultEditCosts a b
