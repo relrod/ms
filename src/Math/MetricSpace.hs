@@ -3,6 +3,8 @@
 
 module Math.MetricSpace where
 
+import Text.EditDistance
+
 -- | A metric space is a set together with a notion of distance between
 -- elements. Distance is computed by a function 'dist' which has the following
 -- four laws:
@@ -47,6 +49,12 @@ newtype Discrete4 a b c d =
 newtype Discrete5 a b c d e =
   Discrete5 {
     getDiscrete5 :: (a, b, c, d, e) } deriving (Eq)
+
+newtype Levenshtein = Levenshtein String
+
+instance MetricSpace Levenshtein where
+  dist (Levenshtein a) (Levenshtein b) =
+    fromIntegral $ levenshteinDistance defaultEditCosts a b
 
 -- | 1-dimensional discrete distance.
 instance (Eq a) => MetricSpace (Discrete1 a) where
