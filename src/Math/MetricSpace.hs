@@ -3,6 +3,7 @@
 
 module Math.MetricSpace where
 
+import qualified Data.Vector as V
 import Text.EditDistance
 
 -- | A metric space is a set together with a notion of distance between
@@ -21,6 +22,8 @@ class MetricSpace a where
   (<->) :: Floating b => a -> a -> b
   (<->) = dist
 
+-- Euclidean distance
+
 newtype Euclidean1 a = Euclidean1 { getEuclidean1 :: Integral a => a }
 newtype Euclidean2 a b =
   Euclidean2 { getEuclidean2 :: (Integral a, Integral b) => (a, b) }
@@ -36,6 +39,10 @@ newtype Euclidean5 a b c d e =
     getEuclidean5 ::
       (Integral a, Integral b, Integral c, Integral d, Integral e) =>
       (a, b, c, d, e) }
+newtype EuclideanVector a =
+  EuclideanVector { getEuclideanVector :: Integral a => V.Vector a }
+
+-- Discrete distance
 
 newtype Discrete1 a = Discrete1 { getDiscrete1 :: a } deriving (Eq)
 newtype Discrete2 a b =
@@ -49,6 +56,7 @@ newtype Discrete4 a b c d =
 newtype Discrete5 a b c d e =
   Discrete5 {
     getDiscrete5 :: (a, b, c, d, e) } deriving (Eq)
+newtype DiscreteVector a = DiscreteVector (V.Vector a) deriving (Eq)
 
 newtype Levenshtein = Levenshtein String
 
@@ -76,6 +84,10 @@ instance (Eq a, Eq b, Eq c, Eq d) => MetricSpace (Discrete4 a b c d) where
 -- | 5-dimensional discrete distance.
 instance (Eq a, Eq b, Eq c, Eq d, Eq e) =>
          MetricSpace (Discrete5 a b c d e) where
+  dist a b = if a == b then 0 else 1
+
+-- | Discrete distance over n-dimensional 'Vector's.
+instance Eq a => MetricSpace (DiscreteVector a) where
   dist a b = if a == b then 0 else 1
 
 -- | 1-dimensional euclidean distance.
