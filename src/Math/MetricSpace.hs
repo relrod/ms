@@ -36,7 +36,7 @@ levenshtein =
 {-# INLINE levenshtein #-}
 
 -- | Discrete distance over n-dimensional 'Vector's.
-discrete :: (Eq a, Floating a, Floating b) => MetricSpace (V.Vector a) b
+discrete :: (Eq a, Floating b) => MetricSpace (V.Vector a) b
 discrete = MetricSpace (\a b -> if a == b then 0 else 1)
 {-# INLINE discrete #-}
 
