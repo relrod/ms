@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE FlexibleInstances #-}
-
 module Math.MetricSpace where
 
 import Data.Profunctor
