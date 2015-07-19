@@ -38,16 +38,14 @@ discrete = MetricSpace (\a b -> if a == b then 0 else 1)
 {-# INLINE discrete #-}
 
 -- | Euclidean distance over n-dimensional 'Vector's.
--- TODO: Can we be more general here?
-euclidean :: MetricSpace (V.Vector Double) Double
+euclidean :: RealFloat a => MetricSpace (V.Vector a) a
 euclidean = MetricSpace (\a b -> (f a b) `seq` sqrt (f a b))
   where
     f a b = V.sum (V.zipWith (\x y -> (x-y)^2) a b)
 {-# INLINE euclidean #-}
 
 -- | Taxicab distance over n-dimensional 'Vector's.
--- TODO: Can we be more general here?
-taxicab :: MetricSpace (V.Vector Double) Double
+taxicab :: RealFloat a => MetricSpace (V.Vector a) a
 taxicab = MetricSpace (\a b -> (f a b) `seq` (f a b))
   where
     f a b = V.sum (V.zipWith (\x y -> abs (x-y)) a b)
