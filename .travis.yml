@@ -18,7 +18,8 @@ before_install:
   - |
     if [ $GHCVER = `ghc --numeric-version` ]; then
       travis/cabal-apt-install --enable-tests $MODE
-      export CABAL=cabal
+      travis_retry sudo apt-get install cabal-install-1.22
+      export CABAL=cabal-1.22
     else
       travis_retry sudo add-apt-repository -y ppa:hvr/ghc
       travis_retry sudo apt-get update
