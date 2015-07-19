@@ -5,6 +5,9 @@ import Data.Profunctor
 import qualified Data.Vector as V
 import Text.EditDistance
 
+-- $setup
+-- >>> import qualified Data.Vector as V
+
 -- | A metric space is a set together with a notion of distance between
 -- elements. Distance is computed by a function 'dist' which has the following
 -- four laws:
@@ -28,17 +31,38 @@ instance Profunctor MetricSpace where
   {-# INLINE rmap #-}
 
 -- | Levenshtein distance between 'String's.
+--
+-- >>> dist levenshtein "foo" "bar"
+-- 3.0
+--
+-- >>> dist levenshtein "hi" "ha"
+-- 1.0
+--
+-- >>> dist levenshtein "ff" "ff"
+-- 0.0
 levenshtein :: Floating b => MetricSpace String b
 levenshtein =
   MetricSpace (\a b -> fromIntegral $ levenshteinDistance defaultEditCosts a b)
 {-# INLINE levenshtein #-}
 
 -- | Discrete distance over n-dimensional 'Vector's.
+--
+-- >>> dist discrete (V.fromList [3,4]) (V.fromList [3,4])
+-- 0.0
+--
+-- >>> dist discrete (V.fromList [1,49]) (V.fromList [3,-94])
+-- 1.0
 discrete :: (Eq a, Floating b) => MetricSpace (V.Vector a) b
 discrete = MetricSpace (\a b -> if a == b then 0 else 1)
 {-# INLINE discrete #-}
 
 -- | Euclidean distance over n-dimensional 'Vector's.
+--
+-- >>> dist euclidean (V.fromList [3,4]) (V.fromList [3,4])
+-- 0.0
+--
+-- >>> dist euclidean (V.fromList [1,49]) (V.fromList [3,-94])
+-- 143.01398533010678
 euclidean :: RealFloat a => MetricSpace (V.Vector a) a
 euclidean = MetricSpace (\a b -> f a b `seq` sqrt (f a b))
   where
@@ -46,6 +70,12 @@ euclidean = MetricSpace (\a b -> f a b `seq` sqrt (f a b))
 {-# INLINE euclidean #-}
 
 -- | Taxicab distance over n-dimensional 'Vector's.
+--
+-- >>> dist taxicab (V.fromList [3,4]) (V.fromList [3,4])
+-- 0.0
+--
+-- >>> dist taxicab (V.fromList [1,49]) (V.fromList [3,-94])
+-- 145.0
 taxicab :: RealFloat a => MetricSpace (V.Vector a) a
 taxicab = MetricSpace f
   where
