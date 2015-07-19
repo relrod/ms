@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 import Data.Profunctor
 import qualified Data.Vector as V
 import Math.MetricSpace
