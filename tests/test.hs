@@ -52,9 +52,7 @@ genTestGroup name metric =
       , QC.testProperty "profunctor rmap" $ \a b -> dist (rmap id metric) a b == dist metric a b
     ]
 
-genTestGroupV
-  :: (Num b, Ord b, Show a, Arbitrary a, Eq a) =>
-     TestName -> MetricSpace (V.Vector a) b -> TestTree
+genTestGroupV :: TestName -> MetricSpace (V.Vector Double) Double -> TestTree
 genTestGroupV name metric =
   testGroup name [
         QC.testProperty "nonnegative" $ \a b -> nonnegative metric a b
