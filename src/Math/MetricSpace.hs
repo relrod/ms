@@ -11,7 +11,7 @@ import Text.EditDistance
 --   (1) __non-negative__: @forall x y. 'dist' x y >= 0@
 --   (2) __identity of indiscernibles__: @forall x y. 'dist' x y == 0 \<=\> x == y@
 --   (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
---   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist'1 y z@
+--   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
 newtype MetricSpace a b = MetricSpace { dist :: a -> a -> b }
 
 -- TODO: How to make this useful? Right now the precedence is all wrong.
