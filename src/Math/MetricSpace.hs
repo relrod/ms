@@ -44,3 +44,11 @@ euclidean = MetricSpace (\a b -> (f a b) `seq` sqrt (f a b))
   where
     f a b = V.sum (V.zipWith (\x y -> (x-y)^2) a b)
 {-# INLINE euclidean #-}
+
+-- | Taxicab distance over n-dimensional 'Vector's.
+-- TODO: Can we be more general here?
+taxicab :: MetricSpace (V.Vector Double) Double
+taxicab = MetricSpace (\a b -> (f a b) `seq` (f a b))
+  where
+    f a b = V.sum (V.zipWith (\x y -> abs (x-y)) a b)
+{-# INLINE taxicab #-}
