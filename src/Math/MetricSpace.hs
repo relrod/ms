@@ -1,5 +1,6 @@
 module Math.MetricSpace where
 
+import Data.Function (on)
 import Data.Profunctor
 import qualified Data.Vector as V
 import Text.EditDistance
@@ -20,7 +21,7 @@ infixl 8 <->
 (<->) = dist
 
 instance Profunctor MetricSpace where
-  lmap f (MetricSpace b) = MetricSpace (\x y -> b (f x) (f y))
+  lmap f (MetricSpace b) = MetricSpace (b `on` f)
   {-# INLINE lmap #-}
 
   rmap f (MetricSpace b) = MetricSpace (\x y -> f (b x y))
@@ -39,14 +40,14 @@ discrete = MetricSpace (\a b -> if a == b then 0 else 1)
 
 -- | Euclidean distance over n-dimensional 'Vector's.
 euclidean :: RealFloat a => MetricSpace (V.Vector a) a
-euclidean = MetricSpace (\a b -> (f a b) `seq` sqrt (f a b))
+euclidean = MetricSpace (\a b -> f a b `seq` sqrt (f a b))
   where
     f a b = V.sum (V.zipWith (\x y -> (x-y)^2) a b)
 {-# INLINE euclidean #-}
 
 -- | Taxicab distance over n-dimensional 'Vector's.
 taxicab :: RealFloat a => MetricSpace (V.Vector a) a
-taxicab = MetricSpace (\a b -> (f a b) `seq` (f a b))
+taxicab = MetricSpace f
   where
     f a b = V.sum (V.zipWith (\x y -> abs (x-y)) a b)
 {-# INLINE taxicab #-}

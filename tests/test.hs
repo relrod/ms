@@ -6,7 +6,7 @@ import Test.Tasty.QuickCheck as QC
 
 data SameLengthVector3 a = SameLengthVector3 (V.Vector a) (V.Vector a) (V.Vector a) deriving Show
 
-main = defaultMain $ opts $ tests
+main = defaultMain $ opts tests
   where
     opts = localOption (QuickCheckTests 3000)
 
@@ -26,7 +26,7 @@ symmetry :: Eq b => MetricSpace a b -> a -> a -> Bool
 symmetry m a b = dist m a b == dist m b a
 
 triangle :: (Num b, Ord b) => MetricSpace a b -> a -> a -> a -> Bool
-triangle m a b c = (dist m a c) <= (dist m a b) + (dist m b c)
+triangle m a b c = dist m a c <= dist m a b + dist m b c
 
 instance (Arbitrary a) => Arbitrary (V.Vector a) where
   arbitrary = fmap V.fromList arbitrary
