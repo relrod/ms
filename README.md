@@ -1,5 +1,7 @@
 # ms - metric spaces
 
+[![Build Status](https://travis-ci.org/relrod/ms.svg?branch=master)](https://travis-ci.org/relrod/ms)
+
 A metric space is a set together with some notion of distance function which
 obeys four laws. See
 [the haddock](https://relrod.github.io/ms/Math-MetricSpace.html) for more
