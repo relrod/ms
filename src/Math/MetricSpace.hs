@@ -23,6 +23,9 @@ infixl 8 <->
 (<->) :: MetricSpace a b -> a -> a -> b
 (<->) = dist
 
+instance Functor (MetricSpace a) where
+  fmap f (MetricSpace a) = MetricSpace (\x y -> f (a x y))
+
 instance Profunctor MetricSpace where
   lmap f (MetricSpace b) = MetricSpace (b `on` f)
   {-# INLINE lmap #-}
