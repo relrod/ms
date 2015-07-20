@@ -2,6 +2,7 @@ module Math.MetricSpace where
 
 import Data.Function (on)
 import Data.Profunctor
+import Data.Semigroup
 import qualified Data.Vector as V
 import Text.EditDistance
 
@@ -25,6 +26,24 @@ infixl 8 <->
 
 instance Functor (MetricSpace a) where
   fmap = dimap id
+
+instance Applicative (MetricSpace a) where
+  pure = MetricSpace . const . const
+  MetricSpace f <*> MetricSpace a = MetricSpace (\x y -> f x y (a x y))
+
+instance Monad (MetricSpace a) where
+  return = pure
+  MetricSpace f >>= fn =
+    MetricSpace (\x y -> let MetricSpace s =  fn (f x y) in s x y)
+
+instance Semigroup b => Semigroup (MetricSpace a b) where
+  MetricSpace m1 <> MetricSpace m2 =
+    MetricSpace (\a1 a2 -> m1 a1 a2 <> m2 a1 a2)
+
+instance Monoid b => Monoid (MetricSpace a b) where
+  mempty = MetricSpace . const . const $ mempty
+  mappend (MetricSpace m1) (MetricSpace m2) =
+    MetricSpace (\a1 a2 -> m1 a1 a2 `mappend` m2 a1 a2)
 
 instance Profunctor MetricSpace where
   lmap f (MetricSpace b) = MetricSpace (b `on` f)
