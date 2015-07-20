@@ -1,23 +1,32 @@
 name:                ms
-version:             0.1.0.0
+version:             0.1
 synopsis:            metric spaces
--- description:
+description:
+  A 'MetricSpace' is a set together with a notion of distance between
+  elements. Distance is computed by a function 'dist' which has the following
+  four laws:
+  .
+    (1) __non-negative__: @forall x y. 'dist' x y >= 0@
+    (2) __identity of indiscernibles__: @forall x y. 'dist' x y == 0 \<=\> x == y@
+    (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
+    (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
+  .
+  See the Wikipedia <https://en.wikipedia.org/wiki/Metric_space article on
+  metric spaces> for more details.
+
 homepage:            https://github.com/relrod/ms
 license:             BSD2
 license-file:        LICENSE
-author:              Ricky Elrod
+author:              Ricky Elrod, Tony Morris
 maintainer:          ricky@elrod.me
--- copyright:
+copyright:           (C) 2015 Ricky Elrod, Tony Morris
 category:            Math
 build-type:          Simple
--- extra-source-files:
-cabal-version:       >=1.10
+cabal-version:       >= 1.10
 
 library
   exposed-modules:
     Math.MetricSpace
-  -- other-modules:
-  -- other-extensions:
   build-depends:       base >= 4 && < 5
                      , contravariant >= 1 && < 2
                      , edit-distance >= 0.2 && < 0.3
