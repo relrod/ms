@@ -1,5 +1,5 @@
 name:                ms
-version:             0.1
+version:             0.2
 synopsis:            metric spaces
 description:
   A 'MetricSpace' is a set together with a notion of distance between

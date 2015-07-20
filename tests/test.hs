@@ -69,17 +69,20 @@ qcProps = testGroup "(checked by QuickCheck)"
   [
     genTestGroup "levenshtein" levenshtein
 
+    -- Integer
+  , testGroup "Integer" [
+      genTestGroupV "discrete" (discrete :: MetricSpace (V.Vector Integer) Integer)
+    ]
+
     -- Double
   , testGroup "Double" [
-        genTestGroupV "discrete" (discrete :: MetricSpace (V.Vector Double) Double)
-      , genTestGroupV "euclidean" (euclidean :: MetricSpace (V.Vector Double) Double)
-      , genTestGroupV "taxicab" (taxicab :: MetricSpace (V.Vector Double) Double)
+      genTestGroupV "euclidean" (euclidean :: MetricSpace (V.Vector Double) Double)
+    , genTestGroupV "taxicab" (taxicab :: MetricSpace (V.Vector Double) Double)
     ]
 
     -- Float
   , testGroup "Float" [
-        genTestGroupV "discrete" (discrete :: MetricSpace (V.Vector Float) Float)
-      , genTestGroupV "euclidean" (euclidean :: MetricSpace (V.Vector Float) Float)
-      , genTestGroupV "taxicab" (taxicab :: MetricSpace (V.Vector Float) Float)
+      genTestGroupV "euclidean" (euclidean :: MetricSpace (V.Vector Float) Float)
+    , genTestGroupV "taxicab" (taxicab :: MetricSpace (V.Vector Float) Float)
     ]
   ]
