@@ -1,4 +1,10 @@
+{-# LANGUAGE CPP #-}
 module Math.MetricSpace where
+
+
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative
+#endif
 
 import Data.Function (on)
 import Data.Profunctor
