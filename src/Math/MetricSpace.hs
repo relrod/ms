@@ -6,7 +6,9 @@ module Math.MetricSpace where
 import Control.Applicative
 #endif
 
+import Control.Lens
 import Data.Function (on)
+import Data.Functor.Contravariant.Divisible
 import Data.Profunctor
 import Data.Semigroup
 import qualified Data.Vector as V
@@ -25,31 +27,44 @@ import Text.EditDistance
 --   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
 newtype MetricSpace a b = MetricSpace { dist :: a -> a -> b }
 
+type ClosedMetricSpace a = MetricSpace a a
+newtype FlippedMetricSpace b a = FlippedMetricSpace (MetricSpace a b)
+type ClosedFlippedMetricSpace a = FlippedMetricSpace a a
+
 -- TODO: How to make this useful? Right now the precedence is all wrong.
 infixl 8 <->
 (<->) :: MetricSpace a b -> a -> a -> b
 (<->) = dist
+{-# INLINE (<->) #-}
 
 instance Functor (MetricSpace a) where
   fmap = dimap id
+  {-# INLINE fmap #-}
 
 instance Applicative (MetricSpace a) where
   pure = MetricSpace . const . const
+  {-# INLINE pure #-}
   MetricSpace f <*> MetricSpace a = MetricSpace (\x y -> f x y (a x y))
+  {-# INLINE (<*>) #-}
 
 instance Monad (MetricSpace a) where
   return = pure
+  {-# INLINE return #-}
   MetricSpace f >>= fn =
     MetricSpace (\x y -> let MetricSpace s =  fn (f x y) in s x y)
+  {-# INLINE (>>=) #-}
 
 instance Semigroup b => Semigroup (MetricSpace a b) where
   MetricSpace m1 <> MetricSpace m2 =
     MetricSpace (\a1 a2 -> m1 a1 a2 <> m2 a1 a2)
+  {-# INLINE (<>) #-}
 
 instance Monoid b => Monoid (MetricSpace a b) where
   mempty = MetricSpace . const . const $ mempty
+  {-# INLINE mempty #-}
   mappend (MetricSpace m1) (MetricSpace m2) =
     MetricSpace (\a1 a2 -> m1 a1 a2 `mappend` m2 a1 a2)
+  {-# INLINE mappend #-}
 
 instance Profunctor MetricSpace where
   lmap f (MetricSpace b) = MetricSpace (b `on` f)
@@ -57,6 +72,51 @@ instance Profunctor MetricSpace where
 
   rmap f (MetricSpace b) = MetricSpace (\x y -> f (b x y))
   {-# INLINE rmap #-}
+
+_FlippedMetricSpace
+  :: Iso
+     (MetricSpace a b)
+     (MetricSpace x y)
+     (FlippedMetricSpace b a)
+     (FlippedMetricSpace y x)
+_FlippedMetricSpace = iso FlippedMetricSpace (\(FlippedMetricSpace m) -> m)
+{-# INLINE _FlippedMetricSpace #-}
+
+instance Contravariant (FlippedMetricSpace b) where
+  contramap f (FlippedMetricSpace m) = FlippedMetricSpace (dimap f id m)
+  {-# INLINE contramap #-}
+
+instance Monoid b => Divisible (FlippedMetricSpace b) where
+  divide
+    f
+    (FlippedMetricSpace (MetricSpace m1))
+    (FlippedMetricSpace (MetricSpace m2)) =
+      FlippedMetricSpace (MetricSpace (\a1 a2 -> let (b1, c1) = f a1
+                                                     (b2, c2) = f a2
+                                                 in
+                                                   m1 b1 b2 `mappend` m2 c1 c2))
+  {-# INLINE divide #-}
+  conquer = FlippedMetricSpace . MetricSpace . const . const $ mempty
+  {-# INLINE conquer #-}
+
+class SwappedMetricSpace m where
+  _SwappedMetricSpace :: Iso (m a b) (m x y) (m a b) (m x y)
+
+instance SwappedMetricSpace MetricSpace where
+  _SwappedMetricSpace =
+    iso
+      (\(MetricSpace m) -> MetricSpace (\a1 a2 -> m a2 a1))
+      (\(MetricSpace m) -> MetricSpace (\a2 a1 -> m a1 a2))
+  {-# INLINE _SwappedMetricSpace #-}
+
+instance SwappedMetricSpace FlippedMetricSpace where
+  _SwappedMetricSpace =
+    iso
+      (\(FlippedMetricSpace (MetricSpace m)) ->
+         FlippedMetricSpace (MetricSpace (\a1 a2 -> m a2 a1)))
+      (\(FlippedMetricSpace (MetricSpace m)) ->
+         FlippedMetricSpace (MetricSpace (\a1 a2 -> m a2 a1)))
+  {-# INLINE _SwappedMetricSpace #-}
 
 -- | Levenshtein distance between 'String's.
 --
