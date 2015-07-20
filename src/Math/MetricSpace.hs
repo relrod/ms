@@ -23,8 +23,8 @@
 --   (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
 --   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
 --
--- See the Wikipedia <https://en.wikipedia.org/wiki/Metric_space article on
--- metric spaces> for more details.
+-- See the Wikipedia <https://en.wikipedia.org/wiki/Metric_space article on metric spaces>
+-- for more details.
 ----------------------------------------------------------------------------
 module Math.MetricSpace where
 
