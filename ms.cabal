@@ -24,6 +24,10 @@ category:            Math
 build-type:          Simple
 cabal-version:       >= 1.10
 
+source-repository head
+  type:     git
+  location: https://github.com/relrod/ms
+
 library
   exposed-modules:
     Math.MetricSpace
