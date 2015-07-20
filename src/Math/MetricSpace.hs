@@ -4,6 +4,28 @@
 #define MIN_VERSION_base(x,y,z) 1
 #endif
 
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Math.MetricSpace
+-- Copyright   :  (C) 2015 Ricky Elrod, Tony Morris
+-- License     :  BSD2 (see LICENSE file)
+--
+-- Maintainer  :  Ricky Elrod <ricky@elrod.me>
+-- Stability   :  provisional
+-- Portability :  lens
+--
+-- A 'MetricSpace' is a set together with a notion of distance between
+-- elements. Distance is computed by a function 'dist' which has the following
+-- four laws:
+--
+--   (1) __non-negative__: @forall x y. 'dist' x y >= 0@
+--   (2) __identity of indiscernibles__: @forall x y. 'dist' x y == 0 \<=\> x == y@
+--   (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
+--   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
+--
+-- See the Wikipedia <https://en.wikipedia.org/wiki/Metric_space article on
+-- metric spaces> for more details.
+----------------------------------------------------------------------------
 module Math.MetricSpace where
 
 #if !MIN_VERSION_base(4,8,0)
@@ -21,14 +43,6 @@ import Text.EditDistance
 -- $setup
 -- >>> import qualified Data.Vector as V
 
--- | A metric space is a set together with a notion of distance between
--- elements. Distance is computed by a function 'dist' which has the following
--- four laws:
---
---   (1) __non-negative__: @forall x y. 'dist' x y >= 0@
---   (2) __identity of indiscernibles__: @forall x y. 'dist' x y == 0 \<=\> x == y@
---   (3) __symmetry__: @forall x y. dist x y == 'dist' y x@
---   (4) __triangle inequality__: @forall x y z. 'dist' x z <= 'dist' x y + 'dist' y z@
 newtype MetricSpace a b = MetricSpace { dist :: a -> a -> b }
 
 type ClosedMetricSpace a = MetricSpace a a
