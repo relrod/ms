@@ -37,6 +37,7 @@ import Data.Function (on)
 import Data.Functor.Contravariant.Divisible
 import Data.Profunctor
 import Data.Semigroup
+import Data.Semigroupoid
 import qualified Data.Vector as V
 import Text.EditDistance
 
@@ -90,6 +91,10 @@ instance Profunctor MetricSpace where
 
   rmap f (MetricSpace b) = MetricSpace (\x y -> f (b x y))
   {-# INLINE rmap #-}
+
+instance Semigroupoid MetricSpace where
+  MetricSpace m1 `o` MetricSpace m2 =
+    MetricSpace (\a1 a2 -> let b = m2 a1 a2 in m1 b b)
 
 _FlippedMetricSpace
   :: Iso
