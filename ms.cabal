@@ -1,5 +1,5 @@
 name:                ms
-version:             0.2
+version:             0.2.1
 synopsis:            metric spaces
 description:
   A 'MetricSpace' is a set together with a notion of distance between
@@ -26,6 +26,7 @@ copyright:           (C) 2015 Ricky Elrod, Tony Morris
 category:            Math
 build-type:          Simple
 cabal-version:       >= 1.10
+extra-source-files:  CHANGELOG.markdown
 
 source-repository head
   type:     git
