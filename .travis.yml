@@ -56,6 +56,6 @@ notifications:
   irc:
     channels:
       - "irc.freenode.org#dagd"
-    skip_join: true
+    skip_join: false
     template:
       - "\x0313ms\x0f/\x0306%{branch}\x0f \x0314%{commit}\x0f %{message} \x0302\x1f%{build_url}\x0f"
