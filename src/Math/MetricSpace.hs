@@ -200,3 +200,4 @@ hamming =
                  fromIntegral .
                  V.length .
                  V.filter (\(x, y) -> x /= y) $ V.zip x y)
+{-# INLINE hamming #-}
