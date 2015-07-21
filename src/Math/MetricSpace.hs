@@ -95,6 +95,7 @@ instance Profunctor MetricSpace where
 instance Semigroupoid MetricSpace where
   MetricSpace m1 `o` MetricSpace m2 =
     MetricSpace (\a1 a2 -> let b = m2 a1 a2 in m1 b b)
+  {-# INLINE o #-}
 
 _FlippedMetricSpace
   :: Iso
