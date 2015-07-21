@@ -187,3 +187,11 @@ taxicab = MetricSpace f
   where
     f a b = V.sum (V.zipWith (\x y -> abs (x-y)) a b)
 {-# INLINE taxicab #-}
+
+-- | Hamming distance over n-dimensional 'Vector's.
+hamming :: (Eq a, Integral b) => MetricSpace (V.Vector a) b
+hamming =
+  MetricSpace (\x y ->
+                 fromIntegral .
+                 V.length .
+                 V.filter (\(x, y) -> x /= y) $ V.zip x y)

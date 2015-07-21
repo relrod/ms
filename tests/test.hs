@@ -72,6 +72,7 @@ qcProps = testGroup "(checked by QuickCheck)"
     -- Integer
   , testGroup "Integer" [
       genTestGroupV "discrete" (discrete :: MetricSpace (V.Vector Integer) Integer)
+    , genTestGroupV "hamming" (hamming :: MetricSpace (V.Vector Char) Integer)
     ]
 
     -- Double
