@@ -128,17 +128,17 @@ class SwappedMetricSpace m where
 instance SwappedMetricSpace MetricSpace where
   _SwappedMetricSpace =
     iso
-      (\(MetricSpace m) -> MetricSpace (\a1 a2 -> m a2 a1))
-      (\(MetricSpace m) -> MetricSpace (\a2 a1 -> m a1 a2))
+      (\(MetricSpace m) -> MetricSpace (flip m))
+      (\(MetricSpace m) -> MetricSpace (flip m))
   {-# INLINE _SwappedMetricSpace #-}
 
 instance SwappedMetricSpace FlippedMetricSpace where
   _SwappedMetricSpace =
     iso
       (\(FlippedMetricSpace (MetricSpace m)) ->
-         FlippedMetricSpace (MetricSpace (\a1 a2 -> m a2 a1)))
+         FlippedMetricSpace (MetricSpace (flip m)))
       (\(FlippedMetricSpace (MetricSpace m)) ->
-         FlippedMetricSpace (MetricSpace (\a1 a2 -> m a2 a1)))
+         FlippedMetricSpace (MetricSpace (flip m)))
   {-# INLINE _SwappedMetricSpace #-}
 
 -- | Levenshtein distance between 'String's.
@@ -199,5 +199,5 @@ hamming =
   MetricSpace (\x y ->
                  fromIntegral .
                  V.length .
-                 V.filter (\(x, y) -> x /= y) $ V.zip x y)
+                 V.filter (uncurry (/=)) $ V.zip x y)
 {-# INLINE hamming #-}
