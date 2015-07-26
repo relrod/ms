@@ -157,6 +157,23 @@ levenshtein =
   MetricSpace (\a b -> fromIntegral $ levenshteinDistance defaultEditCosts a b)
 {-# INLINE levenshtein #-}
 
+-- | Restricted Damerau-Levenshtein distance between 'String's.
+--
+-- >>> dist restrictedDamerauLevenshtein "foo" "bar"
+-- 3
+--
+-- >>> dist restrictedDamerauLevenshtein "hi" "ha"
+-- 1
+--
+-- >>> dist restrictedDamerauLevenshtein "ff" "ff"
+-- 0
+restrictedDamerauLevenshtein :: Integral b => MetricSpace String b
+restrictedDamerauLevenshtein =
+  MetricSpace (\a b ->
+                 fromIntegral $
+                 restrictedDamerauLevenshteinDistance defaultEditCosts a b)
+{-# INLINE restrictedDamerauLevenshtein #-}
+
 -- | Discrete distance over n-dimensional 'Vector's.
 --
 -- >>> dist discrete (V.fromList [3,4]) (V.fromList [3,4])

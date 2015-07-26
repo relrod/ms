@@ -68,6 +68,7 @@ genTestGroupV name metric =
 qcProps = testGroup "(checked by QuickCheck)"
   [
     genTestGroup "levenshtein" levenshtein
+  , genTestGroup "restrictedDamerauLevenshtein" restrictedDamerauLevenshtein
 
     -- Integer
   , testGroup "Integer" [
