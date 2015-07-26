@@ -212,6 +212,18 @@ taxicab = MetricSpace f
 {-# INLINE taxicab #-}
 
 -- | Hamming distance over n-dimensional 'Vector's.
+--
+-- Note that hamming distance is undefined if given vectors from two different
+-- spaces. That is, the 'Vector's must be the same length.
+--
+-- >>> dist hamming (V.fromList "hello") (V.fromList "hullo")
+-- 1
+--
+-- >>> dist hamming (V.fromList "oh") (V.fromList "ok")
+-- 1
+--
+-- >>> dist hamming (V.fromList "whatever") (V.fromList "oh hello")
+-- 6
 hamming :: (Eq a, Integral b) => MetricSpace (V.Vector a) b
 hamming =
   MetricSpace (\x y ->
